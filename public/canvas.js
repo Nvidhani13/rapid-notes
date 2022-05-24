@@ -1,3 +1,5 @@
+const { Socket } = require("socket.io");
+
 let canvas=document.querySelector(".canvas")
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -26,19 +28,31 @@ tool.lineWidth=penWidth
 
 canvas.addEventListener("mousedown",(event)=>{
     mouseDown=true
-    beginPath({
+    // beginPath({
+    //     x:event.clientX,
+    //     y:event.clientY
+    // })
+    let data={
         x:event.clientX,
         y:event.clientY
-    })
+
+    }
+    socket.emit("beginPath",data)
 })
 
 
 canvas.addEventListener("mousemove",(event)=>{
     if(mouseDown){
-        drawStroke({
+        // drawStroke({
+        //     x:event.clientX,
+        //     y:event.clientY
+        // })
+        let data={
             x:event.clientX,
             y:event.clientY
-        })
+        }
+    socket.emit("drawStroke",data)
+
     }
     
 })
@@ -47,7 +61,7 @@ canvas.addEventListener("mouseup",(event)=>{
     let url =canvas.toDataURL()
     undoRedoTracker.push(url)
     track=undoRedoTracker.length-1
-    console.log(undoRedoTracker)
+    // console.log(undoRedoTracker)
 })
 
 
@@ -140,3 +154,13 @@ function undoRedoCanvas(trackObject){
         tool.drawImage(img,0,0,canvas.width,canvas.height)
     }
 }
+
+
+socket.on("beginPath",(data)=>{
+    //data from server
+    beginPath(data)//draw
+})
+socket.on("drawStroke",(data)=>{
+    //data from server
+    drawStroke(data)//draw
+})
