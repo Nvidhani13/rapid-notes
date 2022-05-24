@@ -31,7 +31,7 @@ erase.addEventListener("click",(e)=>{
 
 function toogle(image){
     if(image==="./menu.svg"){
-        img.setAttribute("src","./cancel.png")//* changes the image to cancel on click
+        img.setAttribute("src","./tools/cancel.png")//* changes the image to cancel on click
         openTools()
     }
     else{
