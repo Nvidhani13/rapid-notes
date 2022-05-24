@@ -118,11 +118,11 @@ download.addEventListener("click",(event)=>{
 
 undo.addEventListener("click",(event)=>{
     if(track>0) track--
-    let trackObject={
-        trackValue:track,
+    let data = {
+        trackValue: track,
         undoRedoTracker
     }
-    socket.emit("undoCanvas",trackObject)
+    socket.emit("redoUndo", data);
 })
 
 
@@ -130,17 +130,17 @@ undo.addEventListener("click",(event)=>{
 
 redo.addEventListener("click",(event)=>{
     if(track<undoRedoTracker.length-1) track++
-    let trackObject={
-        trackValue:track,
+    let data = {
+        trackValue: track,
         undoRedoTracker
     }
-    socket.emit("redoCanvas",trackObject)
-    
+    socket.emit("redoUndo", data);
 })
 
 
 
 function undoRedoCanvas(trackObject){
+    console.log("undo redo function invoked ")
     track=trackObject.trackValue
     undoRedoTracker=trackObject.undoRedoTracker
     let url=undoRedoTracker[track]
@@ -172,9 +172,7 @@ socket.on("eraserflag",(eraserFlag)=>{
             tool.strokeStyle=penColor
         }
 })
-socket.on("undoCanvas",(trackObject)=>{
-    undoRedoCanvas(trackObject)
-})
-socket.on("redoCanvas",(trackObject)=>{
-    undoRedoCanvas(trackObject)
+socket.on("redoUndo",(data)=>{
+    console.log("data given to frontend ")
+    undoRedoCanvas(data)
 })

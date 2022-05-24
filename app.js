@@ -4,7 +4,7 @@ const socket=require("socket.io")//realtime dataflow
 
 const app=express()//Intialise app and server ready 
  app.use(express.static("public"))
-let port =5000
+let port =3000
 let server=app.listen(port,()=>{
     console.log("listening to port "+port)
 })
@@ -28,12 +28,11 @@ io.on("connection",(socket)=>{
         //transfer to all connected nodes
         io.sockets.emit("eraserflag",eraserFlag)
     })
-    socket.on("undoCanvas",(trackObject)=>{
-        io.sockets.emit("undoCanvas",trackObject)
+    socket.on("redoUndo",(trackObject)=>{
+        console.log("data recieved by frontend ")
+        io.sockets.emit("redoUndo",data)
     })
-    socket.on("redoCanvas",(trackObject)=>{
-        io.sockets.emit("redoCanvas",trackObject)
-    })
+    
 
 })
 app.get('/', function(req, res, next) {
