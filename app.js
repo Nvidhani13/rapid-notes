@@ -24,6 +24,16 @@ io.on("connection",(socket)=>{
         //transfer to all connected nodes
         io.sockets.emit("drawStroke",data)
     })
+    socket.on("eraserflag",(eraserFlag)=>{
+        //transfer to all connected nodes
+        io.sockets.emit("eraserflag",eraserFlag)
+    })
+    socket.on("undoCanvas",(trackObject)=>{
+        io.sockets.emit("undoCanvas",trackObject)
+    })
+    socket.on("redoCanvas",(trackObject)=>{
+        io.sockets.emit("redoCanvas",trackObject)
+    })
 
 })
 app.get('/', function(req, res, next) {

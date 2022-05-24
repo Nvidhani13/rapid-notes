@@ -1,4 +1,4 @@
-const { Socket } = require("socket.io");
+
 
 let canvas=document.querySelector(".canvas")
 canvas.width = window.innerWidth;
@@ -51,6 +51,7 @@ canvas.addEventListener("mousemove",(event)=>{
             x:event.clientX,
             y:event.clientY
         }
+        
     socket.emit("drawStroke",data)
 
     }
@@ -95,19 +96,13 @@ eraserWidth.addEventListener("change",(event)=>{
     eraWidth=eraserWidth.value
     tool.lineWidth=eraWidth
     console.log(tool.lineWidth)
-      
+    
 
 
 })
 erase.addEventListener("click",(event)=>{
-    if(!eraserFlag){
-    eraserFlag=true
-    tool.strokeStyle="white"
-    eraseTool.style.display="block"}
-    else{
-        eraserFlag=false
-        tool.strokeStyle=penColor
-    }
+    socket.emit("eraserflag",eraserFlag)
+    
 })
 
 
@@ -127,7 +122,7 @@ undo.addEventListener("click",(event)=>{
         trackValue:track,
         undoRedoTracker
     }
-    undoRedoCanvas(trackObject)
+    socket.emit("undoCanvas",trackObject)
 })
 
 
@@ -139,7 +134,8 @@ redo.addEventListener("click",(event)=>{
         trackValue:track,
         undoRedoTracker
     }
-    undoRedoCanvas(trackObject)
+    socket.emit("redoCanvas",trackObject)
+    
 })
 
 
@@ -162,5 +158,23 @@ socket.on("beginPath",(data)=>{
 })
 socket.on("drawStroke",(data)=>{
     //data from server
+    console.log("data recieved ")
     drawStroke(data)//draw
+})
+socket.on("eraserflag",(eraserFlag)=>{
+    if(!eraserFlag){
+        eraserFlag=true
+        console.log("eraser activated ")
+        tool.strokeStyle="white"
+        eraseTool.style.display="block"}
+        else{
+            eraserFlag=false
+            tool.strokeStyle=penColor
+        }
+})
+socket.on("undoCanvas",(trackObject)=>{
+    undoRedoCanvas(trackObject)
+})
+socket.on("redoCanvas",(trackObject)=>{
+    undoRedoCanvas(trackObject)
 })
