@@ -4,7 +4,7 @@ const socket=require("socket.io")//realtime dataflow
 
 const app=express()//Intialise app and server ready 
  app.use(express.static("public"))
-let port =3000
+let port =process.env.PORT||5000
 let server=app.listen(port,()=>{
     console.log("listening to port "+port)
 })
